@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "email": "test@test.cl",
+    "password": "123456"
+  },
+  {
+    "id": "WtqKaEEUuPqlhLvtNfpc9",
+    "email": "test1@test1.cl",
+    "password": "1234561"
+  },
+  {
+    "id": "iq81W1EzfckxBWiBuYthA",
+    "email": "test2@test2.cl",
+    "password": "1234561"
+  },
+  {
+    "id": "JaLOkdEEDLmFSFXSzMHqb",
+    "email": "test3@test3.cl",
+    "password": "1234561"
+  },
+  {
+    "id": "wgfZLjct3fEiXVi3zFHtH",
+    "email": "test4@test4.cl",
+    "password": "1234561"
+  },
+  {
+    "id": "zvoz0o3pEaF07WwBYx8X6",
+    "email": "sergio@sergio.cl",
+    "password": "$2a$10$d1eS9K37rw.x0hynawPGg.d0FqF2gb/PI2Rq4cNMVcA7bYD4rIfZC"
+  }
+]
