@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { petService } from "../services/pet.service";
 import { HttpError } from "../util/httpError.util";
+import { petCreateSchema, petUpdateSchema } from "../schemas/pet.schema";
 
 const getPets = async(req: Request, res: Response, next:NextFunction) => {
     try {
@@ -23,7 +24,11 @@ const getPet = async (req: Request, res: Response, next:NextFunction) => {
 
 const createPet = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, type, age } = req.body;
+      const {error, value} = petCreateSchema.validate(req.body);
+      if(error){
+          throw new HttpError(error.message, 400);
+      }
+      const {name, type, age} = value;
       const { uid } = req;
   
       if (!uid) throw new HttpError("No token", 401);
@@ -38,7 +43,11 @@ const createPet = async (req: Request, res: Response, next: NextFunction) => {
 const updatePet = async (req: Request, res: Response, next:NextFunction) => { 
     try { 
       const { id } = req.params; 
-      const { name, type, age } = req.body; 
+      const {error, value} = petUpdateSchema.validate(req.body);
+      if(error){
+          throw new HttpError(error.message, 400);
+      }
+      const {name, type, age} = value;
       const pet = await petService.updatePetById(id, name, type, age); 
       res.json(pet); 
     } catch (error) { 
