@@ -1,35 +1,24 @@
-import { Request, Response } from "express";
-import { userService } from "../services/user.service";
+import { Request, Response, NextFunction } from "express";
 import { authService } from "../services/auth.service";
 
 
-const login = async(req: Request, res: Response) => {
+const login = async(req: Request, res: Response, next:NextFunction) => {
     try {
         const {email, password} = req.body;
         const token = await authService.login(email, password);
         res.json(token);
     } catch(error){
-        if(error instanceof Error){
-            res.status(500).json({error: error.message});
-        }
-        else { 
-            res.status(500).json({error: "Error server"});
-        }
+        next(error);
     }
 }
 
-const register = async(req: Request, res: Response) => {
+const register = async(req: Request, res: Response, next:NextFunction) => {
     try {
         const {email, password} = req.body;
-        const newUser = await userService.createUser(email, password);
+        const newUser = await authService.register(email, password);
         res.json(newUser);
     } catch(error){
-        if(error instanceof Error){
-            res.status(500).json({error: error.message});
-        }
-        else { 
-            res.status(500).json({error: "Error server"});
-        }
+        next(error);
     }
 }
 export const authController = {login, register}

@@ -1,23 +1,37 @@
-import { readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { User } from "../interfaces/user.interface";
+import { pool } from "../config/database";
+import { User as IUser } from "../interfaces/user.interface";
 
-const __dirname = import.meta.dirname;
-const pathFile = path.resolve(__dirname, "../../data/users.json")
-console.log(pathFile);
+const findOneByEmail = async (email: string) => {
+    // Datos parametrizados
+    const query = {
+      text: `
+      SELECT * FROM USERS
+      WHERE email = $1
+      `,
+      values: [email],
+    };
+  
+    const { rows } = await pool.query(query);
+  
+    return rows[0] as IUser; 
+  };
 
-const readUsers = async () => {
-    const usersJSON = await readFile(pathFile, "utf-8");
-    const users = JSON.parse(usersJSON);
-    return users as User[];
-}
+  const createRegister = async (email: string, password: string) => {
+    const query = {
+      text: `
+      INSERT INTO USERS (email, password)
+      VALUES ($1, $2)
+      RETURNING *
+      `,
+      values: [email, password],
+    };
+  
+    const { rows } = await pool.query(query);
+  
+    return rows[0] as IUser;
+  };
 
-const createUser = async (users: User[]) => {
-    const usersJSON = JSON.stringify(users, null, 2)
-    return await writeFile(pathFile, usersJSON);
-}
-
-export const UserModel = {
-    readUsers,
-    createUser
-}
+  export const UserModel = {
+    createRegister,
+    findOneByEmail,
+  };
